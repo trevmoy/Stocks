@@ -17,7 +17,7 @@ def main():
 
     # Indexing through the rows and columns to make modifications
     nasdaq: list = stocks.get_ticker()
-    for row in range(2, 21):
+    for row in range(2, 100):
         ws['A' + str(row)] = str(nasdaq[row-1])
         ws['B' + str(row)] =  float("{:.2f}".format(stocks.get_price(nasdaq[row-1])))
 
