@@ -16,20 +16,20 @@ def main():
     price = stocks.get_price(ticker)
 
     # User object
-    user = stocks(ticker)
+    user = stocks(ticker, price)
 
     
     # Adds titles to columns
     ws['A' + str(1)] = "Ticker"
     ws['B' + str(1)] = "Live Price"
 
-    # Indexing through the rows and columns to make modifications
-    # nasdaq: list = stocks.get_ticker()
+    # Modifies the cells to display information and tidy up the appearance
     for row in range(2, 3):
-        ws['A' + str(row)] = str(user.get_ticker())
-        ws['B' + str(row)] =  float("{:.2f}".format(price))
+        ws['A' + str(row)] = str(user.get_ticker().upper())
+        ws['B' + str(row)] = float("{:.2f}".format(price))
 
     # Saves the document at the end of the code to update the actual excel sheet
     wb.save('Stocks.xlsx')
+    user.__str__
 
 main()

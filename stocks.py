@@ -17,7 +17,6 @@ class stocks():
         Initializes the parameters
         """
         self._ticker = ticker
-        
 
     def __str__(self) -> str:
         """
@@ -31,10 +30,10 @@ class stocks():
         """
         return self._ticker
     
-    def get_price(ticker: str) -> float:
+    def get_price(self) -> float:
         """
         Returns the price
         """
-        price = get_live_price(ticker)
+        price = get_live_price(self.get_ticker())
         return price
 
