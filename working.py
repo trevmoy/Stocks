@@ -14,19 +14,15 @@ def main():
     # Indexing through the rows and columns to make modifications
 
     nasdaq: list = stocks.get_ticker()
-    for row in range(1, len(nasdaq)):
-        for col in range(1, 2):
-            char = get_column_letter(col)
-            ws[char + str(row)] = str(nasdaq[row])
-                
-    """for row in range(1, len(nasdaq)):
-        for col in range(2, 3):
-            char = get_column_letter(col)
-            ws[char + str(row)] = str(stocks.get_price(nasdaq[row]))
-            """
+    for row in range(1, 20):
+        char = 'A'
+        ws[char + str(row)] = str(nasdaq[row])
+        char = 'B'
+        ws[char + str(row)] =  float("{:.2f}".format(stocks.get_price(nasdaq[row])))
+
+            
 
     # char +str(row)
-    print("${:.2f}".format(stocks.get_price(nasdaq[1])))
     # Saves the document at the end of the code to update the actual excel sheet
     wb.save('Stocks.xlsx')
 
