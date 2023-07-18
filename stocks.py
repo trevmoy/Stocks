@@ -6,17 +6,35 @@ from yahoo_fin.stock_info import *
 
 class stocks():
     """
-    class stocks
+    Class stocks performs functions from the yahoo_fin package
     """
+    
+    # Annotate variables
+    _ticker: str
 
-    def get_ticker() -> list:
+    def __init__(self, ticker: str) -> None:
         """
-        Pulls tickers from nasdaq and indexes through every one in the list
+        Initializes the parameters
         """
-        tickers = tickers_nasdaq()
-        tickers_nasdaq(True)
-        return tickers
+        self._ticker = ticker
+        
+
+    def __str__(self) -> str:
+        """
+        Returns a string version of the object
+        """
+        return f"{self._ticker}, {self._price}"
+
+    def get_ticker(self) -> str:
+        """
+        Returns the ticker
+        """
+        return self._ticker
     
     def get_price(ticker: str) -> float:
-        return get_live_price(ticker)
+        """
+        Returns the price
+        """
+        price = get_live_price(ticker)
+        return price
 
