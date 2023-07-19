@@ -13,12 +13,10 @@ def main():
 
     # Asks the user to enter a ticker of a company
     ticker = input("Please enter a ticker for a company: ")
-    price = stocks.get_price(ticker)
+    user = stocks(ticker)
 
-    # User object
-    user = stocks(ticker, price)
+    price = user.get_price()
 
-    
     # Adds titles to columns
     ws['A' + str(1)] = "Ticker"
     ws['B' + str(1)] = "Live Price"
@@ -30,6 +28,5 @@ def main():
 
     # Saves the document at the end of the code to update the actual excel sheet
     wb.save('Stocks.xlsx')
-    user.__str__
 
 main()

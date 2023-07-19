@@ -11,12 +11,14 @@ class stocks():
     
     # Annotate variables
     _ticker: str
+    _price: float
 
     def __init__(self, ticker: str) -> None:
         """
         Initializes the parameters
         """
         self._ticker = ticker
+        self._price = get_live_price(ticker)
 
     def __str__(self) -> str:
         """
@@ -34,6 +36,6 @@ class stocks():
         """
         Returns the price
         """
-        price = get_live_price(self.get_ticker())
-        return price
+        return self._price
+
 
