@@ -8,10 +8,11 @@ class stocks():
     """
     Class stocks performs functions from the yahoo_fin package
     """
-    
+    print(get_quote_data('aapl'))
     # Annotate variables
     _ticker: str
     _price: float
+    _quote: dict = {}
 
     def __init__(self, ticker: str) -> None:
         """
@@ -19,6 +20,7 @@ class stocks():
         """
         self._ticker = ticker
         self._price = get_live_price(ticker)
+        self._quote = get_quote_data(ticker)
 
     def __str__(self) -> str:
         """
@@ -38,4 +40,8 @@ class stocks():
         """
         return self._price
 
-
+    def get_quote(self) -> dict:
+        """
+        Returns the quote data as a list
+        """
+        return self._quote

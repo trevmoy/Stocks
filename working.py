@@ -20,7 +20,8 @@ def main():
     # Adds titles to columns
     ws['A' + str(1)] = "Ticker"
     ws['B' + str(1)] = "Live Price"
-
+    print(user.get_quote())
+    
     # Modifies the cells to display information and tidy up the appearance
     for i in range(2, 3):
         for row in range(2, 3):
@@ -30,7 +31,6 @@ def main():
             for col in range(i, i+1):
                 char = get_column_letter(col)
                 ws[char + str(row)] = float("{:.2f}".format(price))
-
     # Saves the document at the end of the code to update the actual excel sheet
     wb.save('Stocks.xlsx')
 
