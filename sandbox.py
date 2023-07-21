@@ -14,3 +14,13 @@ df.to_excel('Stocks.xlsx',
             index=False, 
             inf_rep='inf',
             freeze_panes=None)
+
+"""excel = df.to_excel('Stocks2.xlsx', 
+            sheet_name= 'Sheet1', 
+            na_rep='', 
+            float_format="%.2f", 
+            columns=None, 
+            header=True, 
+            index=False, 
+            inf_rep='inf',
+            freeze_panes=None)"""

@@ -41,29 +41,18 @@ class stocks():
         """
         return self._ticker
     
-    def get_price(self) -> float:
-        """
-        Returns the price
-        """
-        return self._price
 
-    def get_info(self):
+    def get_info(self) -> pd:
         """
-        Returns the csv conversion
+        Returns the dataframe info
         """
         stock = get_data(self._ticker, 
                          start_date=self._startDate, 
                          end_date=self._endDate, 
-                         index_as_date=False, 
+                         index_as_date=True, 
                          interval=self._interval)
         df = pd.DataFrame(stock)
-        df.to_excel('Stocks.xlsx', 
-            sheet_name= 'Sheet1', 
-            na_rep='', 
-            float_format="%.2f", 
-            columns=None, 
-            header=True, 
-            index=False, 
-            inf_rep='inf',
-            freeze_panes=None)
-        return None
+        df.reset_index(level=0, inplace=True)
+        
+        return df
+
