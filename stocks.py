@@ -6,8 +6,7 @@ from yahoo_fin.stock_info import *
 import pandas as pd
 amazon = get_data('amzn', start_date='11/08/2020', end_date='11/08/2021', index_as_date=False, interval='1wk')
 df = pd.DataFrame(amazon)
-df_reset=df.set_index('date')
-print(df_reset)
+df.to_excel('Stocks.xlsx', sheet_name= 'Sheet1', na_rep='', float_format=.2, columns=None,)
 
 class stocks():
     """
@@ -17,12 +16,7 @@ class stocks():
     # Annotate variables
     _ticker: str
     _price: float
-    _open: list = []
-    _close: list = []
-    _high: list = []
-    _low: list = []
-    _adjclose: list = []
-    _vol: list = []
+ 
 
     def __init__(self, ticker: str) -> None:
         """
@@ -30,7 +24,6 @@ class stocks():
         """
         self._ticker = ticker
         self._price = get_live_price(ticker)
-        #self._quote = get_data(ticker, start_date='11/08/2020', end_date='11/08/2021', index_as_date=True, interval='1wk', headers="hello")
 
     def __str__(self) -> str:
         """
