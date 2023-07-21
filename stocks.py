@@ -4,9 +4,7 @@ different stocks
 """
 from yahoo_fin.stock_info import *
 import pandas as pd
-amazon = get_data('amzn', start_date='11/08/2020', end_date='11/08/2021', index_as_date=False, interval='1wk')
-df = pd.DataFrame(amazon)
-df.to_excel('Stocks.xlsx', sheet_name= 'Sheet1', na_rep='', float_format=.2, columns=None,)
+
 
 class stocks():
     """
@@ -16,14 +14,20 @@ class stocks():
     # Annotate variables
     _ticker: str
     _price: float
+    _startDate: str
+    _endDate: str
+    _interval: str
  
 
-    def __init__(self, ticker: str) -> None:
+    def __init__(self, ticker: str, startDate: str, endDate: str, interval: str) -> None:
         """
         Initializes the parameters
         """
         self._ticker = ticker
         self._price = get_live_price(ticker)
+        self._startDate = startDate
+        self._endDate = endDate
+        self._interval = interval
 
     def __str__(self) -> str:
         """
@@ -43,40 +47,23 @@ class stocks():
         """
         return self._price
 
-    def get_open(self) -> list:
+    def get_info(self):
         """
-        Returns the open data as a list
+        Returns the csv conversion
         """
-        return self._data
-    
-    def get_close(self) -> list:
-        """
-        Returns the close data as a list
-        """
-        return self._data
-    
-    def get_high(self) -> list:
-        """
-        Returns the high data as a list
-        """
-        return self._data
-    
-    def get_low(self) -> list:
-        """
-        Returns the low data as a list
-        """
-        return self._data
-
-    def get_adjclose(self) -> list:
-        """
-        Returns the adjclose data as a list
-        """
-        return self._data 
-
-    def get_volume(self) -> list:
-        """
-        Returns the volume data as a list
-        """
-        return self._data 
-
-   
+        stock = get_data(self._ticker, 
+                         start_date=self._startDate, 
+                         end_date=self._endDate, 
+                         index_as_date=False, 
+                         interval=self._interval)
+        df = pd.DataFrame(stock)
+        df.to_excel('Stocks.xlsx', 
+            sheet_name= 'Sheet1', 
+            na_rep='', 
+            float_format="%.2f", 
+            columns=None, 
+            header=True, 
+            index=False, 
+            inf_rep='inf',
+            freeze_panes=None)
+        return None
