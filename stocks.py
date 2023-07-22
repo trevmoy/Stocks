@@ -17,8 +17,7 @@ class stocks():
     _startDate: str
     _endDate: str
     _interval: str
- 
-
+    
     def __init__(self, ticker: str, startDate: str, endDate: str, interval: str) -> None:
         """
         Initializes the parameters
@@ -40,11 +39,10 @@ class stocks():
         Returns the ticker
         """
         return self._ticker
-    
 
     def get_info(self) -> pd:
         """
-        Returns the dataframe info
+        Returns the dataframe info of the stock
         """
         stock = get_data(self._ticker, 
                          start_date=self._startDate, 
