@@ -10,7 +10,7 @@ from pandas import *
 
 def main():
     """
-    In main the input and function calls occur
+    The workbook and worksheet are created in main
     """
 
     # Creates the workbook and worksheet to variables wb and ws
