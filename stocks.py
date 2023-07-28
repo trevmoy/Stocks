@@ -44,13 +44,23 @@ class stocks():
         """
         Returns the dataframe info of the stock
         """
-        stock = get_data(self._ticker, 
-                         start_date=self._startDate, 
-                         end_date=self._endDate, 
-                         index_as_date=True, 
-                         interval=self._interval)
-        df = pd.DataFrame(stock)
-        df.reset_index(level=0, inplace=True)
-        
-        return df
+        try:
+            stock = get_data(self._ticker, 
+                            start_date=self._startDate, 
+                            end_date=self._endDate, 
+                            index_as_date=True, 
+                            interval=self._interval)
+        except:
+            pass
+        else:
+            df = pd.DataFrame(stock)
+            df.index.names = ['date']
+            df.reset_index(level=0, inplace=True)
+            return df
 
+    def get_nasdaq(self) -> list:
+        """
+        Returns all the available tickers listed on the nasdaq
+        """
+        nasdaq_list: list = [tickers_nasdaq]
+        return nasdaq_list
