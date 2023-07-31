@@ -6,8 +6,8 @@ Testing the import openpyxl module
 from stocks import stocks
 from openpyxl.utils.dataframe import dataframe_to_rows
 from openpyxl import *
-from pandas import *
-
+from openpyxl.worksheet.dimensions import ColumnDimension
+from openpyxl.cell.cell import Cell
 def main():
     """
     In main the input and function calls occur
@@ -18,7 +18,6 @@ def main():
     ws = wb.active
     correct_info: bool = False
 
-
     # Object instantiation is placed in a try-except handler to catch invalid input
     while(correct_info == False):
         try:
@@ -28,30 +27,36 @@ def main():
             endDate = input("Please enter an end date(ex: 12/06/2005): ")
             interval = input("Please enter the interval you'd like(ex: 1d, 1wk, 1mo): ")
             # Instantiates the stocks object, passing the input through the parameters and assigning it as 'user'
+
             user = stocks(ticker, startDate, endDate, interval)
-            # test
-            print(user.get_info())
+
         except:
             # Exception restarts the loop, allowing the object to be re-instantiated
             print("\nYou've entered invalid information, please re-enter\n")
             correct_info = False
         else:
             # If the object instatiation is true and doesn't restart the while loop
+            print("True information")
             correct_info = True
             
     # Sorts through df retrieved from the stocks class, sets index & header equal to true and appends each cell with the df info
     for r in dataframe_to_rows(user.get_info(), index=True, header=True):
         ws.append(r)
 
+    # Corrects the sheet by deleting the unecessary empty space
+    ws.delete_cols(1, 1)
+    ws.delete_rows(2, 2)
+    
     # Sets the index and header style to the default pandas style
-    for cell in ws['B'] + ws[1]:
+    for cell in ws[1]:
         cell.style = 'Pandas'
 
-    # Correcting unnecessary columns and rows
-    ws.delete_cols(1,1)
-    ws.delete_rows(2,2)
+    # Adjusts column width for date column
+    col_len = len(str(ws['A4'].value))
+    ws.column_dimensions['A'].width = col_len
 
-    print(user.get_info())
+    # Adjusts column width for volume column
+    ws.column_dimensions['G'].width = 12
 
     # Asks user for file name
     file_name = input("Please enter a file name for your excell sheet: ")

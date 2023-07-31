@@ -40,18 +40,18 @@ class stocks():
         """
         return self._ticker
 
-    def get_info(self) -> pd:
+    def get_info(self):
         """
         Returns the dataframe info of the stock
         """
         try:
             stock = get_data(self._ticker, 
-                            start_date=self._startDate, 
-                            end_date=self._endDate, 
-                            index_as_date=True, 
-                            interval=self._interval)
+                                start_date=self._startDate, 
+                                end_date=self._endDate, 
+                                index_as_date=True, 
+                                interval=self._interval)
         except:
-            pass
+            return False
         else:
             df = pd.DataFrame(stock)
             df.index.names = ['date']
