@@ -6,8 +6,6 @@ Testing the import openpyxl module
 from stocks import stocks
 from openpyxl.utils.dataframe import dataframe_to_rows
 from openpyxl import *
-from openpyxl.worksheet.dimensions import ColumnDimension
-from openpyxl.cell.cell import Cell
 def main():
     """
     In main the input and function calls occur
@@ -20,25 +18,32 @@ def main():
 
     # Object instantiation is placed in a try-except handler to catch invalid input
     while(correct_info == False):
+        """
+        The while loop will continue to ask for input inside of a
+        try-except-else condition to handle any errors caused by incorrect user input.
+        The try block asks for the 4 things required from the user and then creates an object called user with them.
+        It then tests to see if an error is present and if there is a manual error is raised and the exception repeats
+        the loop. When the input is valid, the loop and try-except-else will end.
+        """
         try:
-            # Asks the user to enter a ticker, start date, end date, and interval
             ticker = input("Please enter a ticker for a company: ")
             startDate = input("Please enter a start date(ex: 12/06/2005): ")
             endDate = input("Please enter an end date(ex: 12/06/2005): ")
             interval = input("Please enter the interval you'd like(ex: 1d, 1wk, 1mo): ")
-            # Instantiates the stocks object, passing the input through the parameters and assigning it as 'user'
 
             user = stocks(ticker, startDate, endDate, interval)
-
+            
+            if user.get_info() == False:
+                raise AssertionError
+            
         except:
-            # Exception restarts the loop, allowing the object to be re-instantiated
             print("\nYou've entered invalid information, please re-enter\n")
             correct_info = False
         else:
-            # If the object instatiation is true and doesn't restart the while loop
-            print("True information")
             correct_info = True
-            
+
+
+                
     # Sorts through df retrieved from the stocks class, sets index & header equal to true and appends each cell with the df info
     for r in dataframe_to_rows(user.get_info(), index=True, header=True):
         ws.append(r)
@@ -61,8 +66,9 @@ def main():
     # Asks user for file name
     file_name = input("Please enter a file name for your excell sheet: ")
     # Saves the document at the end of the code to update the actual excel sheet
-    wb.save(f'/Users/trevormoy/Documents/VS Code/Projects - Summer 2023/Stocks2022/Stocks/StockInfo/{file_name}.xlsx')
+    wb.save(f'{file_name}.xlsx')
     
     # Print statement to let users know that the spreadsheet is ready for viewing
     print("\nYour new excel sheet is ready!")
+
 main()

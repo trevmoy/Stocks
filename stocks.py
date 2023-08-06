@@ -51,6 +51,7 @@ class stocks():
                                 index_as_date=True, 
                                 interval=self._interval)
         except:
+            print("test")
             return False
         else:
             df = pd.DataFrame(stock)
