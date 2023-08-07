@@ -6,6 +6,7 @@ Testing the import openpyxl module
 from stocks import stocks
 from openpyxl.utils.dataframe import dataframe_to_rows
 from openpyxl import *
+import pandas as pd
 def main():
     """
     In main the input and function calls occur
@@ -15,6 +16,13 @@ def main():
     wb = Workbook()
     ws = wb.active
     correct_info: bool = False
+    see_nasdaq: str 
+
+    # Asks user if they want to see the nasdaq listings
+    print("Would you like to see the tickers listed on the nasdaq?\n(Y/N)")
+    see_nasdaq = input("")
+    if (see_nasdaq == "Y" or see_nasdaq == "y"):
+        print(stocks.get_nasdaq())
 
     # Object instantiation is placed in a try-except handler to catch invalid input
     while(correct_info == False):
@@ -22,7 +30,8 @@ def main():
         The while loop will continue to ask for input inside of a
         try-except-else condition to handle any errors caused by incorrect user input.
         The try block asks for the 4 things required from the user and then creates an object called user with them.
-        It then tests to see if an error is present and if there is a manual error is raised and the exception repeats
+        It then tests to see if the function returns a 
+        pandas df type and if there is a manual error is raised and the exception repeats
         the loop. When the input is valid, the loop and try-except-else will end.
         """
         try:
@@ -30,11 +39,14 @@ def main():
             startDate = input("Please enter a start date(ex: 12/06/2005): ")
             endDate = input("Please enter an end date(ex: 12/06/2005): ")
             interval = input("Please enter the interval you'd like(ex: 1d, 1wk, 1mo): ")
-
             user = stocks(ticker, startDate, endDate, interval)
             
-            if user.get_info() == False:
+            if isinstance(user.get_info(), pd.DataFrame):
+                print("\nThis information works\n")
+                correct_info = True
+            else:
                 raise AssertionError
+
             
         except:
             print("\nYou've entered invalid information, please re-enter\n")
@@ -42,8 +54,6 @@ def main():
         else:
             correct_info = True
 
-
-                
     # Sorts through df retrieved from the stocks class, sets index & header equal to true and appends each cell with the df info
     for r in dataframe_to_rows(user.get_info(), index=True, header=True):
         ws.append(r)
