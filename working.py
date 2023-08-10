@@ -7,6 +7,10 @@ from stocks import stocks
 from openpyxl.utils.dataframe import dataframe_to_rows
 from openpyxl import *
 import pandas as pd
+from openpyxl.chart import LineChart, Reference, Series
+import matplotlib.pyplot as plt
+
+
 def main():
     """
     In main the input and function calls occur
@@ -17,6 +21,7 @@ def main():
     ws = wb.active
     correct_info: bool = False
     see_nasdaq: str 
+    stock_dataframe: pd
 
     # Asks user if they want to see the nasdaq listings
     print("Would you like to see the tickers listed on the nasdaq?\n(Y/N)")
@@ -43,6 +48,7 @@ def main():
             
             if isinstance(user.get_info(), pd.DataFrame):
                 print("\nThis information works\n")
+                stock_dataframe = user.get_info()
                 correct_info = True
             else:
                 raise AssertionError
@@ -73,10 +79,21 @@ def main():
     # Adjusts column width for volume column
     ws.column_dimensions['G'].width = 12
 
+    # Attempting to plot data on a graph
+    plt.style.use('ggplot')
+
+    print(type(stock_dataframe)) 
+    stock_dataframe.plot()
+
+    # values = Reference(ws, min_col=0, min_row=0, max_col=len(ws['1']), max_row=len(ws['open']))
+    # chart = LineChart()
+    # chart.add_data(values)
+    # ws.add_chart(chart, 'J15')
+
     # Asks user for file name
     file_name = input("Please enter a file name for your excell sheet: ")
     # Saves the document at the end of the code to update the actual excel sheet
-    wb.save(f'{file_name}.xlsx')
+    wb.save(f'{file_name.strip()}.xlsx')
     
     # Print statement to let users know that the spreadsheet is ready for viewing
     print("\nYour new excel sheet is ready!")

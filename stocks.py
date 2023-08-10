@@ -67,3 +67,8 @@ class stocks():
         """
         return tickers_nasdaq()
     
+    def get_line_graph():
+        """
+        Returns a line plot to see the different flucuations over time.
+        """
+    pd.plotting
