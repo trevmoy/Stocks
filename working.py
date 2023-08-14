@@ -80,15 +80,24 @@ def main():
     ws.column_dimensions['G'].width = 12
 
     # Attempting to plot data on a graph
-    plt.style.use('ggplot')
+    print("Would you like to plot your data on a line chart?")
+    add_chart = input("Y or N: ")
+    if(add_chart == "Y" or add_chart == "y"):
+        values = Reference(ws, min_col=2, min_row=1, max_col=6, max_row=len(stock_dataframe['open']))
+        date = Reference(ws, min_col=1, max_col=1, min_row=2, max_row=len(stock_dataframe['date']))
+        chart = LineChart()
+        chart.add_data(values, titles_from_data=True)
+        chart.set_categories(date)
+        chart.title = "Open, High, Low, Close, Adjecent"
+        chart.x_axis.title = "Date"
+        chart.y_axis.title = "Price"
+        chart.height = 10
+        ws.add_chart(chart, 'M1')
+    else:
+        pass
+    
 
-    print(type(stock_dataframe)) 
-    stock_dataframe.plot()
 
-    # values = Reference(ws, min_col=0, min_row=0, max_col=len(ws['1']), max_row=len(ws['open']))
-    # chart = LineChart()
-    # chart.add_data(values)
-    # ws.add_chart(chart, 'J15')
 
     # Asks user for file name
     file_name = input("Please enter a file name for your excell sheet: ")
