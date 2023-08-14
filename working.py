@@ -6,7 +6,10 @@ Testing the import openpyxl module
 from stocks import stocks
 from openpyxl.utils.dataframe import dataframe_to_rows
 from openpyxl import *
-from pandas import *
+import pandas as pd
+from openpyxl.chart import LineChart, Reference, Series
+import matplotlib.pyplot as plt
+
 
 def main():
     """
@@ -17,45 +20,91 @@ def main():
     wb = Workbook()
     ws = wb.active
     correct_info: bool = False
+    see_nasdaq: str 
+    stock_dataframe: pd
 
-    # Deletes any pre-existing content in the sheet
-    # ws.delete_rows(1, ws.max_row)
+    # Asks user if they want to see the nasdaq listings
+    print("Would you like to see the tickers listed on the nasdaq?\n(Y/N)")
+    see_nasdaq = input("")
+    if (see_nasdaq == "Y" or see_nasdaq == "y"):
+        print(stocks.get_nasdaq())
 
     # Object instantiation is placed in a try-except handler to catch invalid input
     while(correct_info == False):
+        """
+        The while loop will continue to ask for input inside of a
+        try-except-else condition to handle any errors caused by incorrect user input.
+        The try block asks for the 4 things required from the user and then creates an object called user with them.
+        It then tests to see if the function returns a 
+        pandas df type and if there is a manual error is raised and the exception repeats
+        the loop. When the input is valid, the loop and try-except-else will end.
+        """
         try:
-            # Asks the user to enter a ticker, start date, end date, and interval
             ticker = input("Please enter a ticker for a company: ")
             startDate = input("Please enter a start date(ex: 12/06/2005): ")
             endDate = input("Please enter an end date(ex: 12/06/2005): ")
             interval = input("Please enter the interval you'd like(ex: 1d, 1wk, 1mo): ")
-            # Instantiates the stocks object, passing the input through the parameters and assigning it as 'user'
             user = stocks(ticker, startDate, endDate, interval)
+            
+            if isinstance(user.get_info(), pd.DataFrame):
+                print("\nThis information works\n")
+                stock_dataframe = user.get_info()
+                correct_info = True
+            else:
+                raise AssertionError
+
+            
         except:
-            # Exception restarts the loop, allowing the object to be re-instantiated
-            print("\nYou've entered information, please re-enter\n")
+            print("\nYou've entered invalid information, please re-enter\n")
             correct_info = False
         else:
-            # If the object instatiation is true and doesn't restart the while loop
             correct_info = True
 
     # Sorts through df retrieved from the stocks class, sets index & header equal to true and appends each cell with the df info
     for r in dataframe_to_rows(user.get_info(), index=True, header=True):
         ws.append(r)
 
+    # Corrects the sheet by deleting the unecessary empty space
+    ws.delete_cols(1, 1)
+    ws.delete_rows(2, 2)
+    
     # Sets the index and header style to the default pandas style
-    for cell in ws['A'] + ws[1]:
+    for cell in ws[1]:
         cell.style = 'Pandas'
 
-    # Correcting unnecessary columns and rows
-    ws.delete_cols(1,1)
-    ws.delete_rows(2,2)
+    # Adjusts column width for date column
+    col_len = len(str(ws['A4'].value))
+    ws.column_dimensions['A'].width = col_len
+
+    # Adjusts column width for volume column
+    ws.column_dimensions['G'].width = 12
+
+    # Attempting to plot data on a graph
+    print("Would you like to plot your data on a line chart?")
+    add_chart = input("Y or N: ")
+    if(add_chart == "Y" or add_chart == "y"):
+        values = Reference(ws, min_col=2, min_row=1, max_col=6, max_row=len(stock_dataframe['open']))
+        date = Reference(ws, min_col=1, max_col=1, min_row=2, max_row=len(stock_dataframe['date']))
+        chart = LineChart()
+        chart.add_data(values, titles_from_data=True)
+        chart.set_categories(date)
+        chart.title = "Open, High, Low, Close, Adjecent"
+        chart.x_axis.title = "Date"
+        chart.y_axis.title = "Price"
+        chart.height = 10
+        ws.add_chart(chart, 'M1')
+    else:
+        pass
+    
+
+
 
     # Asks user for file name
     file_name = input("Please enter a file name for your excell sheet: ")
     # Saves the document at the end of the code to update the actual excel sheet
-    wb.save(f'{file_name}.xlsx')
-
+    wb.save(f'{file_name.strip()}.xlsx')
+    
     # Print statement to let users know that the spreadsheet is ready for viewing
     print("\nYour new excel sheet is ready!")
+
 main()

@@ -43,14 +43,32 @@ class stocks():
     def get_info(self) -> pd:
         """
         Returns the dataframe info of the stock
+        Uses a try-except-else to handle errors. 
+        If an error is encountered, the exception will return false to the main function.
+        The else will create a pandas dataframe and return it to the main function.
         """
-        stock = get_data(self._ticker, 
-                         start_date=self._startDate, 
-                         end_date=self._endDate, 
-                         index_as_date=True, 
-                         interval=self._interval)
-        df = pd.DataFrame(stock)
-        df.reset_index(level=0, inplace=True)
-        
-        return df
+        try:
+            stock = get_data(self._ticker, 
+                                start_date=self._startDate, 
+                                end_date=self._endDate, 
+                                index_as_date=True, 
+                                interval=self._interval)
+        except:
+            return False
+        else:
+            df = pd.DataFrame(stock)
+            df.index.names = ['date']
+            df.reset_index(level=0, inplace=True)
+            return df
 
+    def get_nasdaq() -> list:
+        """
+        Prints all the available tickers listed on the nasdaq
+        """
+        return tickers_nasdaq()
+    
+    def get_line_graph():
+        """
+        Returns a line plot to see the different flucuations over time.
+        """
+    pd.plotting
